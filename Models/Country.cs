@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WebApplication10Jan20Country.Models
 {
@@ -22,6 +23,9 @@ namespace WebApplication10Jan20Country.Models
             [Length(2,5)]
                     
             public string IsoCode {get; set;}
+
+            [NotMapped]
+            public string DisplayNameForFKDropDown { get => $"{CapitalCityName}, {CountryName}"; }
 
 
     }

@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Humanizer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -23,7 +25,8 @@ namespace WebApplication10Jan20Country.Controllers
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.Shoes.Include(s => s.Country);
-            return View(await applicationDbContext.ToListAsync());
+
+            return View(await applicationDbContext.ToListAsync());  //Model rep data
         }
 
         // GET: Shoes/Details/5
@@ -46,9 +49,10 @@ namespace WebApplication10Jan20Country.Controllers
         }
 
         // GET: Shoes/Create
+        [Authorize]
         public IActionResult Create()
         {
-            ViewData["ShoeOrginCountry"] = new SelectList(_context.Countries, "CountryID", "CapitalCityName");
+            ViewData["ShoeOrginCountry"] = new SelectList(_context.Countries, "CountryID", "DisplayNameForFKDropDown");
             return View();
         }
 
@@ -57,10 +61,25 @@ namespace WebApplication10Jan20Country.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ShoeID,ShoeName,ShoeColor,ShoeOrginCountry")] Shoe shoe)
+        [Authorize]
+        public async Task<IActionResult> Create([Bind("ShoeID,ShoeName,ShoeColor,ShoeOrginCountry,ShoeImageUpload")] Shoe shoe)
         {
             if (ModelState.IsValid)
             {
+                if (shoe.ShoeImageUpload != null) {
+                    //someone has uploaded an image
+                    string fileName = Path.GetFileName(shoe.ShoeImageUpload.FileName);
+                    //we can decide to change the filename
+                    string ext = Path.GetExtension(shoe.ShoeImageUpload.FileName);
+
+                    shoe.ShoeImage = fileName + ext;
+
+                    shoe.ShoeImageUpload.CopyTo(
+                        new FileStream(@"wwwroot\images\shoe\" + fileName + ext, FileMode.CreateNew)
+                        );
+                
+                }
+
                 _context.Add(shoe);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -70,6 +89,7 @@ namespace WebApplication10Jan20Country.Controllers
         }
 
         // GET: Shoes/Edit/5
+        [Authorize]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -91,6 +111,7 @@ namespace WebApplication10Jan20Country.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Edit(int id, [Bind("ShoeID,ShoeName,ShoeColor,ShoeOrginCountry")] Shoe shoe)
         {
             if (id != shoe.ShoeID)
@@ -123,6 +144,7 @@ namespace WebApplication10Jan20Country.Controllers
         }
 
         // GET: Shoes/Delete/5
+        [Authorize]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -144,6 +166,7 @@ namespace WebApplication10Jan20Country.Controllers
         // POST: Shoes/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var shoe = await _context.Shoes.FindAsync(id);

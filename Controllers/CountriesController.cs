@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -51,6 +52,7 @@ namespace WebApplication10Jan20Country.Controllers
         }
 
         // GET: Countries/Create
+        [Authorize]
         public IActionResult Create()
         {
             return View();
@@ -61,6 +63,7 @@ namespace WebApplication10Jan20Country.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Create([Bind("CountryID,CountryName,Continent,CapitalCityName,IsoCode")] Country country)
         {
             if (ModelState.IsValid)
@@ -73,6 +76,7 @@ namespace WebApplication10Jan20Country.Controllers
         }
 
         // GET: Countries/Edit/5
+        [Authorize]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -93,6 +97,7 @@ namespace WebApplication10Jan20Country.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Edit(int id, [Bind("CountryID,CountryName,Continent,CapitalCityName,IsoCode")] Country country)
         {
             if (id != country.CountryID)
@@ -124,6 +129,7 @@ namespace WebApplication10Jan20Country.Controllers
         }
 
         // GET: Countries/Delete/5
+        [Authorize]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -144,6 +150,7 @@ namespace WebApplication10Jan20Country.Controllers
         // POST: Countries/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var country = await _context.Countries.FindAsync(id);
