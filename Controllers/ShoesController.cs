@@ -49,7 +49,7 @@ namespace WebApplication10Jan20Country.Controllers
         }
 
         // GET: Shoes/Create
-        [Authorize]
+        [Authorize(Roles = "Admin,Manager")]
         public IActionResult Create()
         {
             ViewData["ShoeOrginCountry"] = new SelectList(_context.Countries, "CountryID", "DisplayNameForFKDropDown");
@@ -89,7 +89,7 @@ namespace WebApplication10Jan20Country.Controllers
         }
 
         // GET: Shoes/Edit/5
-        [Authorize]
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -111,8 +111,8 @@ namespace WebApplication10Jan20Country.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize]
-        public async Task<IActionResult> Edit(int id, [Bind("ShoeID,ShoeName,ShoeColor,ShoeOrginCountry")] Shoe shoe)
+        [Authorize(Roles = "Admin,Manager")]
+        public async Task<IActionResult> Edit(int id, [Bind("ShoeID,ShoeName,ShoeColor,ShoeOrginCountry,ShoeImage")] Shoe shoe)
         {
             if (id != shoe.ShoeID)
             {
@@ -123,6 +123,7 @@ namespace WebApplication10Jan20Country.Controllers
             {
                 try
                 {
+
                     _context.Update(shoe);
                     await _context.SaveChangesAsync();
                 }
@@ -139,12 +140,22 @@ namespace WebApplication10Jan20Country.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+
+            string errors = ""; 
+            
+            foreach(var error in ModelState.Values.SelectMany( v => v.Errors).ToList()){
+
+                errors += error.ErrorMessage +"<br/>";
+            }
+
+            ViewData["ModelErrors"] = errors;
+            return Content(errors);
             ViewData["ShoeOrginCountry"] = new SelectList(_context.Countries, "CountryID", "CapitalCityName", shoe.ShoeOrginCountry);
             return View(shoe);
         }
 
         // GET: Shoes/Delete/5
-        [Authorize]
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -166,7 +177,7 @@ namespace WebApplication10Jan20Country.Controllers
         // POST: Shoes/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        [Authorize]
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var shoe = await _context.Shoes.FindAsync(id);

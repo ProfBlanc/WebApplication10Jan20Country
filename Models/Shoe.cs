@@ -28,6 +28,7 @@ namespace WebApplication10Jan20Country.Models
         [ValidateNever]
         public Country Country { get; set; }
 
+        [ValidateNever]
         [NotMapped]
         public IFormFile ShoeImageUpload { get; set; }
 

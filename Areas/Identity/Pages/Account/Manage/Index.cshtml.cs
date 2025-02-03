@@ -23,6 +23,8 @@ namespace WebApplication10Jan20Country.Areas.Identity.Pages.Account.Manage
         {
             _userManager = userManager;
             _signInManager = signInManager;
+
+
         }
 
         /// <summary>
@@ -58,6 +60,12 @@ namespace WebApplication10Jan20Country.Areas.Identity.Pages.Account.Manage
             [Phone]
             [Display(Name = "Phone number")]
             public string PhoneNumber { get; set; }
+
+            [Display(Name ="First Name")]
+            public string FirstName { get; set; }
+ 
+            [Display(Name = "Last Name")]
+            public string LastName { get; set; }
         }
 
         private async Task LoadAsync(IdentityUser user)
@@ -96,6 +104,10 @@ namespace WebApplication10Jan20Country.Areas.Identity.Pages.Account.Manage
             if (!ModelState.IsValid)
             {
                 await LoadAsync(user);
+
+                
+                
+                
                 return Page();
             }
 
