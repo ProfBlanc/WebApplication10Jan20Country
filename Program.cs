@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using WebApplication10Jan20Country.Data;
+using WebApplication10Jan20Country.Models;
 
 namespace WebApplication10Jan20Country
 {
@@ -16,7 +17,7 @@ namespace WebApplication10Jan20Country
                 options.UseSqlServer(connectionString));
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-            builder.Services.AddDefaultIdentity<IdentityUser>(
+            builder.Services.AddDefaultIdentity<UserProfile>(
                 options => options.SignIn.RequireConfirmedAccount = true)
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();

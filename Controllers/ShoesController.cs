@@ -37,7 +37,7 @@ namespace WebApplication10Jan20Country.Controllers
                 return NotFound();
             }
 
-            var shoe = await _context.Shoe
+            var shoe = await _context.Shoes
                 .Include(s => s.Country)
                 .FirstOrDefaultAsync(m => m.ShoeID == id);
             if (shoe == null)
@@ -170,7 +170,6 @@ namespace WebApplication10Jan20Country.Controllers
             }
 
             ViewData["ModelErrors"] = errors;
-            return Content(errors);
             ViewData["ShoeOrginCountry"] = new SelectList(_context.Countries, "CountryID", "CapitalCityName", shoe.ShoeOrginCountry);
             return View(shoe);
         }
@@ -184,7 +183,7 @@ namespace WebApplication10Jan20Country.Controllers
                 return NotFound();
             }
 
-            var shoe = await _context.Shoe
+            var shoe = await _context.Shoes
                 .Include(s => s.Country)
                 .FirstOrDefaultAsync(m => m.ShoeID == id);
             if (shoe == null)

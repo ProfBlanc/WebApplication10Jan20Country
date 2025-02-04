@@ -8,10 +8,11 @@ namespace WebApplication10Jan20Country.Data
     {
         public DbSet<Country> Countries { get; set; }
         public DbSet<Shoe> Shoes { get; set; }
+
+        public DbSet<UserProfile> UserProfiles { get; set; }
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
         }
-        public DbSet<WebApplication10Jan20Country.Models.Shoe> Shoe { get; set; } = default!;
     }
 }
