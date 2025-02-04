@@ -79,6 +79,11 @@ namespace WebApplication10Jan20Country.Controllers
                         );
                 
                 }
+                else
+                {
+
+                    shoe.ShoeImage = "no-image.png";
+                }
 
                 _context.Add(shoe);
                 await _context.SaveChangesAsync();
@@ -112,7 +117,7 @@ namespace WebApplication10Jan20Country.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin,Manager")]
-        public async Task<IActionResult> Edit(int id, [Bind("ShoeID,ShoeName,ShoeColor,ShoeOrginCountry,ShoeImage")] Shoe shoe)
+        public async Task<IActionResult> Edit(int id, [Bind("ShoeID,ShoeName,ShoeColor,ShoeOrginCountry,ShoeImage,ShoeImageUpload")] Shoe shoe)
         {
             if (id != shoe.ShoeID)
             {
@@ -121,6 +126,22 @@ namespace WebApplication10Jan20Country.Controllers
 
             if (ModelState.IsValid)
             {
+
+                if (shoe.ShoeImageUpload != null)
+                {
+                    //someone has uploaded an image
+                    string fileName = Path.GetFileName(shoe.ShoeImageUpload.FileName);
+                    //we can decide to change the filename
+                    string ext = Path.GetExtension(shoe.ShoeImageUpload.FileName);
+
+                    shoe.ShoeImage = fileName + ext;
+
+                    shoe.ShoeImageUpload.CopyTo(
+                        new FileStream(@"wwwroot\images\shoe\" + fileName + ext, FileMode.CreateNew)
+                        );
+
+                }
+
                 try
                 {
 

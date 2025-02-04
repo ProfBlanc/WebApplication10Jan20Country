@@ -30,7 +30,7 @@ namespace WebApplication10Jan20Country.Models
 
         [ValidateNever]
         [NotMapped]
-        public IFormFile ShoeImageUpload { get; set; }
+        public IFormFile? ShoeImageUpload { get; set; }
 
         [ValidateNever]
         [Display(Name = "Photo")]

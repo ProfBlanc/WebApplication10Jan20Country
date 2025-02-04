@@ -11,7 +11,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Edit">
+        <form asp-action="Edit" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="ShoeID" />
             <div class="form-group">
@@ -29,6 +29,16 @@
                 <select asp-for="ShoeOrginCountry" class="form-control" asp-items="ViewBag.ShoeOrginCountry"></select>
                 <span asp-validation-for="ShoeOrginCountry" class="text-danger"></span>
             </div>
+            <div class="form-group">
+                <label asp-for="ShoeImageUpload" class="control-label"></label>
+                <input asp-for="ShoeImageUpload" type="file" class="control-label" accept=".png, .jpg, .jpeg" />
+            </div>
+
+            <div class="form-group">
+                <span>Current Shoe Image</span>
+                <img src="~/images/shoe/@Model.ShoeImage" alt="@Model.ShoeName" width="100"/>
+                </div>
+
             <div class="form-group">
                 <input asp-for="ShoeImage" type="hidden" class="form-control" />
                 <input type="submit" value="Save" class="btn btn-primary" />
