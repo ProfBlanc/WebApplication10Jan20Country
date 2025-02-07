@@ -9,9 +9,11 @@ using WebApplication10Jan20Country.Data;
 using WebApplication10Jan20Country.Models;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebApplication10Jan20Country.Controllers
 {
+    [Authorize(Roles="Admin")]
     public class UserProfilesController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -25,15 +27,66 @@ namespace WebApplication10Jan20Country.Controllers
             _userManager = userManager;
         }
 
+        [AllowAnonymous]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+
+        public async Task<IActionResult> MyAccount([Bind("UserProfileID,UserID,FirstName,LastName,DateOfBirth,UserName,Email,PhoneNumber")] UserProfile userProfile)
+        {
+            var userName = User.Identity.Name;
+            var user = await _userManager.FindByNameAsync(userName);
+            if (user == null)
+            {
+
+                return NotFound();
+            }
+
+
+            if (ModelState.IsValid && user.Id == userProfile.UserID )
+            {
+                try
+                {
+                    user.PhoneNumber = userProfile.PhoneNumber;
+                    _context.Update(userProfile);
+                    await _context.SaveChangesAsync();
+                    await _userManager.UpdateAsync(user);
+
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!UserProfileExists(userProfile.UserProfileID))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction("MyAccount");
+            }
+            string errors = string.Join("; ", ModelState.Values
+                                        .SelectMany(x => x.Errors)
+                                        .Select(x => x.ErrorMessage));
+            //return Content(ModelState.IsValid + "? PIDs? " + user.Id + " &" + userProfile.UserID + "errors = "+ errors);
+            return View(userProfile);
+
+        }
+
+        [AllowAnonymous]
+
         public async Task<IActionResult> MyAccount()
         {
             var userName = User.Identity.Name;
             var user = await _userManager.FindByNameAsync(userName);
+            if (user == null) {
 
+                return NotFound();
+            }
 
             var userProfile = await _context.UserProfile
                 .Include(u => u.IdentityUser)
-                .FirstAsync(m => m.UserID.Equals(user.Id));
+                .FirstOrDefaultAsync(m => m.UserID.Equals(user.Id));
 
             if (userProfile == null) {
 
@@ -45,6 +98,10 @@ namespace WebApplication10Jan20Country.Controllers
                 };
                 _context.Add(userProfile);
             }
+
+            userProfile.Email = user.Email;
+            userProfile.PhoneNumber = user.PhoneNumber;
+            userProfile.UserName = user.UserName;
 
             return View(userProfile);
         }
@@ -88,7 +145,7 @@ namespace WebApplication10Jan20Country.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("UserProfileID,UserID,FirstName,LastName,DateOfBirth")] UserProfile userProfile)
+        public async Task<IActionResult> Create([Bind("UserProfileID,UserID,FirstName,LastName,DateOfBirth,UserName,Email,PhoneNumber")] UserProfile userProfile)
         {
             if (ModelState.IsValid)
             {
@@ -122,7 +179,8 @@ namespace WebApplication10Jan20Country.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("UserProfileID,UserID,FirstName,LastName,DateOfBirth")] UserProfile userProfile)
+        [AllowAnonymous]
+        public async Task<IActionResult> Edit(int id, [Bind("UserProfileID,UserID,FirstName,LastName,DateOfBirth,UserName,Email,PhoneNumber")] UserProfile userProfile)
         {
             if (id != userProfile.UserProfileID)
             {

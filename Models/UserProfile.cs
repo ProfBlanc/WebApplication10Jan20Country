@@ -19,9 +19,21 @@ namespace WebApplication10Jan20Country.Models
 
         public DateTime? DateOfBirth { get; set; }
 
+
+        [ValidateNever]
+        [NotMapped]
+        public string UserName { get; set; }
+
+        [ValidateNever]
+        [NotMapped]
+        public string Email { get; set; }
+
+        [ValidateNever]
+        [NotMapped]
+
+        public string PhoneNumber { get; set; }
+
         [ValidateNever]
         public IdentityUser IdentityUser { get; set; }
-
-
     }
 }
