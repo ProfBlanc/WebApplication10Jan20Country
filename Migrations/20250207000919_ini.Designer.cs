@@ -9,11 +9,11 @@ using WebApplication10Jan20Country.Data;
 
 #nullable disable
 
-namespace WebApplication10Jan20Country.Data.Migrations
+namespace WebApplication10Jan20Country.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250122235253_addingShoeUpload")]
-    partial class addingShoeUpload
+    [Migration("20250207000919_ini")]
+    partial class ini
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -283,7 +283,7 @@ namespace WebApplication10Jan20Country.Data.Migrations
 
                     b.HasIndex("ShoeOrginCountry");
 
-                    b.ToTable("Shoe");
+                    b.ToTable("Shoes");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
