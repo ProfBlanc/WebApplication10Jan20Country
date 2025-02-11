@@ -13,7 +13,6 @@ namespace WebApplication10Jan20Country.Data
             : base(options)
         {
         }
-        public DbSet<WebApplication10Jan20Country.Models.UserProfile> UserProfile { get; set; } = default!;
         
 	}
 }

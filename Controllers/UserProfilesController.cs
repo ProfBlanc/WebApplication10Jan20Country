@@ -8,7 +8,6 @@ using Microsoft.EntityFrameworkCore;
 using WebApplication10Jan20Country.Data;
 using WebApplication10Jan20Country.Models;
 using Microsoft.AspNetCore.Identity;
-using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 
 namespace WebApplication10Jan20Country.Controllers
@@ -84,7 +83,7 @@ namespace WebApplication10Jan20Country.Controllers
                 return NotFound();
             }
 
-            var userProfile = await _context.UserProfile
+            var userProfile = await _context.UserProfiles
                 .Include(u => u.IdentityUser)
                 .FirstOrDefaultAsync(m => m.UserID.Equals(user.Id));
 
@@ -110,7 +109,7 @@ namespace WebApplication10Jan20Country.Controllers
         // GET: UserProfiles
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.UserProfile.Include(u => u.IdentityUser);
+            var applicationDbContext = _context.UserProfiles.Include(u => u.IdentityUser);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -122,7 +121,7 @@ namespace WebApplication10Jan20Country.Controllers
                 return NotFound();
             }
 
-            var userProfile = await _context.UserProfile
+            var userProfile = await _context.UserProfiles
                 .Include(u => u.IdentityUser)
                 .FirstOrDefaultAsync(m => m.UserProfileID == id);
             if (userProfile == null)
@@ -165,7 +164,7 @@ namespace WebApplication10Jan20Country.Controllers
                 return NotFound();
             }
 
-            var userProfile = await _context.UserProfile.FindAsync(id);
+            var userProfile = await _context.UserProfiles.FindAsync(id);
             if (userProfile == null)
             {
                 return NotFound();
@@ -219,7 +218,7 @@ namespace WebApplication10Jan20Country.Controllers
                 return NotFound();
             }
 
-            var userProfile = await _context.UserProfile
+            var userProfile = await _context.UserProfiles
                 .Include(u => u.IdentityUser)
                 .FirstOrDefaultAsync(m => m.UserProfileID == id);
             if (userProfile == null)
@@ -235,10 +234,10 @@ namespace WebApplication10Jan20Country.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var userProfile = await _context.UserProfile.FindAsync(id);
+            var userProfile = await _context.UserProfiles.FindAsync(id);
             if (userProfile != null)
             {
-                _context.UserProfile.Remove(userProfile);
+                _context.UserProfiles.Remove(userProfile);
             }
 
             await _context.SaveChangesAsync();
@@ -247,7 +246,7 @@ namespace WebApplication10Jan20Country.Controllers
 
         private bool UserProfileExists(int id)
         {
-            return _context.UserProfile.Any(e => e.UserProfileID == id);
+            return _context.UserProfiles.Any(e => e.UserProfileID == id);
         }
     }
 }

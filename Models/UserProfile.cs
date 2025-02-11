@@ -15,22 +15,15 @@ namespace WebApplication10Jan20Country.Models
 
         public string FirstName { get; set; } = string.Empty;
         public string LastName { get; set; } = string.Empty;
-
-
         public DateTime? DateOfBirth { get; set; }
-
-
         [ValidateNever]
         [NotMapped]
         public string UserName { get; set; }
-
         [ValidateNever]
         [NotMapped]
         public string Email { get; set; }
-
         [ValidateNever]
         [NotMapped]
-
         public string PhoneNumber { get; set; }
 
         [ValidateNever]
