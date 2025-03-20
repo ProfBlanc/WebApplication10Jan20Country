@@ -5,7 +5,7 @@ VisualStudioVersion = 17.9.34622.214
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApplication10Jan20Country", "WebApplication10Jan20Country.csproj", "{E6B03081-04D5-4A46-B0A3-9BA7B11B6D21}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CountriesShoesWebMVCTests", "..\CountriesShoesWebMVCTests\CountriesShoesWebMVCTests.csproj", "{68F5C560-89CA-4013-BE33-D70B1EA9DA56}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CountriesShoesWebMVCTests", "..\CountriesShoesWebMVCTests\CountriesShoesWebMVCTests.csproj", "{68F5C560-89CA-4013-BE33-D70B1EA9DA56}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
